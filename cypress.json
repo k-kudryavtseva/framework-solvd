@@ -1,0 +1,9 @@
+{
+	"video": false,
+	"responseTimeout": 15000,
+	"requestTimeout": 15000,
+	"defaultCommandTimeout": 5000,
+	"payeLoadTimeout": 10000,
+	"projectId": "x7m8mk",
+	"waitForAnimations": true
+}
