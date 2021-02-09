@@ -26,10 +26,12 @@
 	"license": "ISC",
 	"dependencies": {
 		"@percy/cypress": "^2.3.1",
+		"adm-zip": "^0.5.2",
 		"cypress-audit": "^0.3.0",
 		"cypress-cucumber-preprocessor": "^2.3.1",
 		"cypress-image-snapshot": "^3.1.1",
 		"cypress-xpath": "^1.4.0",
+		"nodemailer": "^6.4.17",
 		"prettier": "^1.19.1",
 		"xlsx": "^0.15.6"
 	},
@@ -41,6 +43,7 @@
 		"cypress": "^4.7.0",
 		"cypress-failed-log": "^2.7.0",
 		"ts-node": "^8.7.0",
-		"typescript": "^3.8.3"
+		"typescript": "^3.8.3",
+		"lighthouse": "^7.0.0"
 	}
 }

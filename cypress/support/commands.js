@@ -27,7 +27,9 @@ import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
 import '@percy/cypress'
 import "cypress-audit/commands";
 
-
+Cypress.on('uncaught:exception', (err) => {
+    return false
+})
 Cypress.Commands.add('login', (username, password) => {
 	cy.clearCookies()
 	cy.clearLocalStorage()
