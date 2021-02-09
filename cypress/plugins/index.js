@@ -43,7 +43,8 @@ module.exports = (on, config) => {
 		async function generateReport() {
 			const chrome = await chromeLauncher.launch({chromeFlags: ['--headless']});
 			const options = {logLevel: 'info', output: 'html', port: chrome.port};
-			const runnerResult = await light_house(report.url, options);
+			const config = require('lighthouse/lighthouse-core/config/lr-desktop-config.js');
+			const runnerResult = await light_house(report.url, options, config);
 
 			// `.report` is the HTML report as a string
 			const reportHtml = runnerResult.report;
