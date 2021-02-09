@@ -2,13 +2,15 @@
 
 ## Dynamically generate data from CSV or XLS files
 
-To Install `npm install` 
+1º - To Install `npm install` 
 
-To convert Excel files to JSON: `npm run convertXLStoJSON`
+2º - To convert Excel files to JSON: `npm run convertXLStoJSON`
 
 - File:- `testData/convertXLStoJSON.ts`
 - Input:- `testData/urls.xlsx`
 - Output:- `cypress/fixtures/urls.json`
+
+3º - To run : `npx cypress open` 
 
 In the excel file specify the header as shown in the image below. 
 
