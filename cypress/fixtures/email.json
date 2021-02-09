@@ -1,0 +1,9 @@
+{
+  "folderPath": "generated_reports",
+  "zipPath": "generated_reports/lhreports.zip",
+  "senderEmail": "tt2857506@gmail.com",
+  "senderPassword": "testtest2857506",
+  "receiverEmail": "dpitsul@solvd.com",
+  "subject": "lighthouse",
+  "text": "Generated lighthouse report"
+}
