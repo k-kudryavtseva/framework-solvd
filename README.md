@@ -12,4 +12,4 @@ To convert Excel files to JSON: `npm run convertXLStoJSON`
 
 In the excel file we have to specify the e-mail sender and receiver. 
 
-[Imgur](https://i.imgur.com/3whK0FZ.png)
+<a href="https://imgur.com/3whK0FZ"><img src="https://i.imgur.com/3whK0FZ.png" title="source: imgur.com" /></a>
