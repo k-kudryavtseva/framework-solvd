@@ -13,3 +13,7 @@ To convert Excel files to JSON: `npm run convertXLStoJSON`
 In the excel file specify the header as shown in the image below. 
 
 <a href="https://imgur.com/d0dtzUr"><img src="https://i.imgur.com/d0dtzUr.png" title="source: imgur.com" /></a>
+
+Also the sender email has to have the application security turned off, for this you have to go to Manage account > Security and : 
+
+<a href="https://imgur.com/AFKoGbP"><img src="https://i.imgur.com/AFKoGbP.png" title="source: imgur.com" /></a>
