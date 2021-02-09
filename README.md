@@ -2,6 +2,8 @@
 
 ## Dynamically generate data from CSV or XLS files
 
+To Install `npm run install` 
+
 To convert Excel files to JSON: `npm run convertXLStoJSON`
 
 - File:- `testData/convertXLStoJSON.ts`
