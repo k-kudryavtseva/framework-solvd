@@ -1,4 +1,4 @@
-# cypress-4-automation-framework-with-cucumber-percy-docker-jenkins
+# cypress automation with lighthouse
 
 ## Dynamically generate data from CSV or XLS files
 
