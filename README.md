@@ -10,3 +10,4 @@ To convert Excel files to JSON: `npm run convertXLStoJSON`
 - Input:- `testData/testData.xlsx`
 - Output:- `cypress/fixtures/testData.json`
 
+In the excel file we have to specify the e-mail sender and receiver. 
