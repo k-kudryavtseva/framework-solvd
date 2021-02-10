@@ -45,10 +45,18 @@ module.exports = (on, config) => {
 			const options = {logLevel: 'info', output: 'html', port: chrome.port};
 			const config = require('lighthouse/lighthouse-core/config/lr-desktop-config.js');
 			const runnerResult = await light_house(report.url, options, config);
+			const dir = './generated_reports';
 
 			// `.report` is the HTML report as a string
 			const reportHtml = runnerResult.report;
-			fs.writeFileSync(report.reportPath, reportHtml);
+
+            if (!fs.existsSync(dir)){
+                fs.mkdirSync(dir);
+                fs.writeFileSync(report.reportPath, reportHtml);
+            }
+            else {
+                fs.writeFileSync(report.reportPath, reportHtml);
+            }
 
 			// `.lhr` is the Lighthouse Result as a JS object
 			console.log('Report is done for', runnerResult.lhr.finalUrl);
