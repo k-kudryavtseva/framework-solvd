@@ -1,46 +1,44 @@
-const testData = require('../fixtures/testData.json')
+const urls = require('../fixtures/urls.json')
 
-testData.forEach((testDataRow, index, testDataArray) => {
+urls.forEach((urlRow, index, urlsArray) => {
     describe('Test urls from excel', () => {
         beforeEach('testing url', () => {
-            cy.visit(testDataRow.url)
+            cy.visit(urlRow.url, {failOnStatusCode: false})
             cy.lighthouse({
                 performance: 60
             })
         })
         it('',() => {
 					const report = {
-						url: testDataRow.url,
-						reportPath: testDataRow.reportPath,
+						url: urlRow.url,
+						reportName: urlRow.reportName,
 					}
 
-					cy.task('lighthouseReport', report, {timeout: 120000})
+					cy.task('lighthouseReport', report, {timeout: 120000}).then(reportPath => {
+
+						console.log('Lighthouse report saved to: ' + reportPath)
+
+					})
     	})
 
 			after('zip reports and send to email', () => {
 
+				if (urlsArray.length - 1 === index) {
 
+					cy.fixture('emailData').then(emailData => {
 
-				if (testDataArray.length - 1 === index) {
+						cy.task('zipFolder', emailData[0].zipName).then((zipPath) => {
 
-					cy.fixture('email').then(email => {
-						const fileData = {
-							folderPath: email.folderPath,
-							zipPath: email.zipPath
-						}
-
-						cy.task('zipFolder', fileData).then((zipPath) => {
-
-							const emailData = {
+							const localEmailData = {
 								zipPath: zipPath,
-								senderEmail: email.senderEmail,
-								senderPassword: email.senderPassword,
-								receiverEmail: email.receiverEmail,
-								subject: email.subject,
-								text: email.text
+								senderEmail: emailData[0].senderEmail,
+								senderPassword: emailData[0].senderPassword,
+								receiverEmail: emailData[0].receiverEmail,
+								subject: emailData[0].subject,
+								text: emailData[0].text
 							}
 
-							cy.task('sendEmail', emailData).then((status) => {
+							cy.task('sendEmail', localEmailData).then((status) => {
 								console.log("Status: ", status)
 							})
 						})

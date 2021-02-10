@@ -20,9 +20,12 @@ module.exports = (on, config) => {
 const { lighthouse, pa11y, prepareAudit } = require("cypress-audit");
 const nodemailer = require('nodemailer');
 const AdmZip = require('adm-zip');
+const mkdirp = require('mkdirp');
 const fs = require('fs');
 const light_house = require('lighthouse');
 const chromeLauncher = require('chrome-launcher');
+
+const reportsFolderName = 'generatedReports'
 
 module.exports = (on, config) => {
 	on("before:browser:launch", (browser = {}, launchOptions) => {
@@ -40,76 +43,81 @@ module.exports = (on, config) => {
 	on('task', {
 		lighthouseReport (report) {
 
-		async function generateReport() {
-			const chrome = await chromeLauncher.launch({chromeFlags: ['--headless']});
-			const options = {logLevel: 'info', output: 'html', port: chrome.port};
-			const config = require('lighthouse/lighthouse-core/config/lr-desktop-config.js');
-			const runnerResult = await light_house(report.url, options, config);
+			async function generateReport() {
+				const chrome = await chromeLauncher.launch({chromeFlags: ['--headless']});
+				const options = {logLevel: 'info', output: 'html', port: chrome.port};
+				const config = require('lighthouse/lighthouse-core/config/lr-desktop-config.js');
+				const runnerResult = await light_house(report.url, options, config);
 
-			// `.report` is the HTML report as a string
-			const reportHtml = runnerResult.report;
-			fs.writeFileSync(report.reportPath, reportHtml);
+				if (!fs.existsSync(reportsFolderName))
+					fs.mkdirSync(reportsFolderName)
 
-			// `.lhr` is the Lighthouse Result as a JS object
-			console.log('Report is done for', runnerResult.lhr.finalUrl);
-			console.log('Performance score was', runnerResult.lhr.categories.performance.score * 100);
+				// `.report` is the HTML report as a string
+				const reportHtml = runnerResult.report;
+				const reportPath = reportsFolderName + '/' + report.reportName
+				fs.writeFileSync(reportPath, reportHtml);
 
-			await chrome.kill();
+				// `.lhr` is the Lighthouse Result as a JS object
+				console.log('Report is done for', runnerResult.lhr.finalUrl);
+				console.log('Performance score was', runnerResult.lhr.categories.performance.score * 100);
 
-			return report.reportPath
+				await chrome.kill();
+
+				return reportPath
+			}
+
+			return generateReport()
 		}
-
-		return generateReport()
-		}
-	  })
+	})
 	
 	on('task', {
-	zipFolder (fileData) {
+		zipFolder (zipName) {
+			const file = new AdmZip();
 
-		const file = new AdmZip();
+			const zipPath = reportsFolderName + '/' + zipName
 
-		file.addLocalFolder(fileData.folderPath);
-		file.writeZip(fileData.zipPath);
+			file.addLocalFolder(reportsFolderName);
+			file.writeZip(zipPath);
 
-		return fileData.zipPath
-	}
-	  })
+			return zipPath
+		}
+	})
 	
 	on('task', {
 		sendEmail (emailData) {
 	
-		async function sendEmailWithFile() {
-			const transporter = nodemailer.createTransport({
-			service: 'gmail',
-			auth: {
-			user: emailData.senderEmail,
-			pass: emailData.senderPassword
-			}
-		});
+			async function sendEmailWithFile() {
+				const transporter = nodemailer.createTransport({
+					service: 'gmail',
+					auth: {
+						user: emailData.senderEmail,
+						pass: emailData.senderPassword
+					}
+				});
 
-			const mailOptions = {
-			from: emailData.senderEmail,
-			to: emailData.receiverEmail,
-			subject: emailData.subject,
-			text: emailData.text,
-			attachments: [
-			{
-				path: emailData.zipPath
-			}
-		]
-		};
+				const mailOptions = {
+					from: emailData.senderEmail,
+					to: emailData.receiverEmail,
+					subject: emailData.subject,
+					text: emailData.text,
+					attachments: [
+						{
+							path: emailData.zipPath
+						}
+					]
+				};
 
-		await transporter.sendMail(mailOptions, function (error, info) {
-			if (error) {
-			console.log(error);
-			} else {
-			console.log('Email sent: ' + info.response);
-			}
-		});
-		return 'done'
-		}
+				await transporter.sendMail(mailOptions, function (error, info) {
+					if (error)
+						console.log(error);
+					else
+						console.log('Email sent: ' + info.response);
+				});
 
-		return sendEmailWithFile();
+				return 'done'
+			}
+
+			return sendEmailWithFile();
 		}
 	})
 };
